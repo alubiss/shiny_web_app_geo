@@ -16,7 +16,18 @@ ui <- dashboardPage(
         menuItem("Dashboard", tabName = "Dashboard"),
         menuItem("Tables", tabName = "Tables")
     )),
-    dashboardBody()
+    dashboardBody(
+        
+        fluidRow( box(
+            title = "Geocoder : ",
+            textInput("text", "Enter your address: ")) ),
+        
+        fluidRow(
+        box())
+        
+        
+        
+    )
 )
 
 server <- function(input, output) { }
