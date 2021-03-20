@@ -8,12 +8,15 @@ library("sf")
 library(shinydashboard)
 library(shinyjs)
 library(leaflet)
+library('tidygeocoder')
 
 world_spdf <- readOGR( 
-    dsn = '/Users/alubis/Desktop/OneDrive/DS sem I/Visualization in R/zaj 7/Data/',
+    dsn = '/Users/alubis/shiny_geo_proj/',
     layer ="TM_WORLD_BORDERS_SIMPL-0.3", 
     verbose = FALSE
 )
+
+
 
 ui <- dashboardPage(
     skin = "purple",
@@ -27,7 +30,11 @@ ui <- dashboardPage(
         fluidRow( 
             box(width=100,
                 title = "Geocoder : ",
-                textInput("text", "Enter your address: ")) ),
+                textInput("text", "Enter your address: ", "Puławska 17"),
+                textInput("text2", "Longitude: ", "X"),
+                textInput("text3", "Latitude: ", "Y")
+                #,verbatimTextOutput("value")
+                ) ),
         
         fluidRow(
         box(width=100,
@@ -39,18 +46,32 @@ ui <- dashboardPage(
     )
 )
 
-server <- function(input, output) { 
+server <- function(input, output, session) { 
     
+    ######################################### TEXT #################################################################
+    
+    #output$value <- renderText({ input$text })
+    
+    observe({
+        
+    xy= geo(input$text, method = 'osm')
+    updateTextInput(session, "text2", value = paste(xy$long))
+    updateTextInput(session, "text3", value = paste(xy$lat))
+    
+    ######################################### OUTPUT MAPA ##########################################################
+        
     output$mapa <- renderLeaflet({
-        
-        # Final Map
-        leaflet(world_spdf) %>% 
-            addTiles()  %>% 
-            setView(lat=52, lng=19.2 ,zoom=6)
-        
-    })
     
+        # Final Map
+        leaflet(world_spdf) %>%
+            addTiles()  %>% 
+            setView(lat=xy$lat, lng=xy$long ,zoom=12) %>%
+            addCircleMarkers(lng = xy$long, lat = xy$lat)
+        })
+    
+    })  
     
     }
 
 shinyApp(ui, server)
+
