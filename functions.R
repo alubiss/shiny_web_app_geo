@@ -23,15 +23,16 @@ get_x_y <- function(dane) {
   return(long_lat)
 }
 
-plot_points <- function(dane) {
+plot_points <- function(dane, our_adress) {
 
   get_coords <- get_x_y(dane)
   
   leaflet() %>%
     addTiles() %>%
-    setView(lng = get_coords$lng_x, lat = get_coords$lat_y, zoom = 10) %>%
+    setView(lng = our_adress$long, lat = our_adress$lat, zoom = 14) %>%
     addMarkers(data = dane$osm_points,
-               label= dane$osm_points$name
-    )
+               label= dane$osm_points$name) %>%
+    addCircleMarkers(lng = our_adress$long, lat = our_adress$lat,
+                     label= our_adress$street)
 
 }
