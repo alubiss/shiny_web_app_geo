@@ -19,8 +19,6 @@ world_spdf <- readOGR(
 )
 
 source("/Users/alubis/shiny_geo_proj/functions.R")
-a = get_osm_data("Warszawa, Poland", our_key = "amenity", our_value = 'bus_station') %>% plot_points()
-
 
 ui <- dashboardPage(
     skin = "purple",
@@ -29,17 +27,21 @@ ui <- dashboardPage(
         # https://fontawesome.com/icons?d=gallery
         menuItem("Dashboard", tabName = "Dashboard", icon = icon("globe-europe")),
         menuItem("Tables", tabName = "Tables", icon = icon("info-circle")),
-        menuItem("Bus stops", tabName = "Bus stops", icon = icon("bus")),
+        menuItem("Bus stops", tabName = "Bus_stops", icon = icon("bus")),
         menuItem("Restaurants", tabName = "Restaurants", icon = icon("mug-hot")),
         menuItem("Shops", tabName = "Shops", icon = icon("shopping-cart")),
         menuItem("Tourism", tabName = "Tourism", icon = icon("university"))
     )),
     dashboardBody(
-        
+     
+        shiny::tagList(
+        tabItems(
+        tabItem(tabName = "Dashboard",   
         fluidRow( 
             box(width=100,
                 title = "Geocoder : ",
                 textInput("text", "Enter your address: ", "Puławska 17"),
+                textInput("city", "City : ", "Warszawa"),
                 submitButton("Search", icon("refresh")),
                 textInput("text2", "Longitude: ", "X"),
                 textInput("text3", "Latitude: ", "Y")
@@ -52,8 +54,18 @@ ui <- dashboardPage(
                 tabPanel("Map", leafletOutput("mapa", width = "100%", height = 500)),
                 tabPanel("Informations"))))
         
+         ),
         
-    )
+        tabItem(tabName = "Bus_stops",
+          
+                fluidRow(
+                    box(width=100,
+                        tabsetPanel(
+                            tabPanel("Map", leafletOutput("mapa_bus", width = "100%", height = 500)),
+                            tabPanel("Informations"))))      
+                
+        )        
+    )))
 )
 
 server <- function(input, output, session) { 
@@ -64,7 +76,7 @@ server <- function(input, output, session) {
     
     observe({
         
-    xy= geo(input$text, method = 'osm')
+    xy= geo(street= input$text, city= input$city, method = 'osm')
     updateTextInput(session, "text2", value = paste(xy$long))
     updateTextInput(session, "text3", value = paste(xy$lat))
     
@@ -79,7 +91,14 @@ server <- function(input, output, session) {
             addCircleMarkers(lng = xy$long, lat = xy$lat)
         })
     
-    })  
+ 
+    
+    ######################################### OUTPUT MAPA BUS ####################################################
+    
+    bus_stops = get_osm_data(paste(input$city, "Poland", sep=", "), our_key = "amenity", our_value = 'bus_station') %>% plot_points(our_adress=xy)
+    output$mapa_bus <- renderLeaflet({bus_stops})
+
+    }) 
     
     }
 
