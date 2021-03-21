@@ -9,6 +9,8 @@ library(shinydashboard)
 library(shinyjs)
 library(leaflet)
 library('tidygeocoder')
+library(osmdata) 
+library(osrm)
 
 world_spdf <- readOGR( 
     dsn = '/Users/alubis/shiny_geo_proj/',
@@ -16,14 +18,21 @@ world_spdf <- readOGR(
     verbose = FALSE
 )
 
+source("/Users/alubis/shiny_geo_proj/functions.R")
+a = get_osm_data("Warszawa, Poland", our_key = "amenity", our_value = 'bus_station') %>% plot_points()
 
 
 ui <- dashboardPage(
     skin = "purple",
     dashboardHeader(title = "GEO app"),
     dashboardSidebar(sidebarMenu(
-        menuItem("Dashboard", tabName = "Dashboard"),
-        menuItem("Tables", tabName = "Tables")
+        # https://fontawesome.com/icons?d=gallery
+        menuItem("Dashboard", tabName = "Dashboard", icon = icon("globe-europe")),
+        menuItem("Tables", tabName = "Tables", icon = icon("info-circle")),
+        menuItem("Bus stops", tabName = "Bus stops", icon = icon("bus")),
+        menuItem("Restaurants", tabName = "Restaurants", icon = icon("mug-hot")),
+        menuItem("Shops", tabName = "Shops", icon = icon("shopping-cart")),
+        menuItem("Tourism", tabName = "Tourism", icon = icon("university"))
     )),
     dashboardBody(
         
@@ -31,6 +40,7 @@ ui <- dashboardPage(
             box(width=100,
                 title = "Geocoder : ",
                 textInput("text", "Enter your address: ", "Puławska 17"),
+                submitButton("Search", icon("refresh")),
                 textInput("text2", "Longitude: ", "X"),
                 textInput("text3", "Latitude: ", "Y")
                 #,verbatimTextOutput("value")
@@ -65,7 +75,7 @@ server <- function(input, output, session) {
         # Final Map
         leaflet(world_spdf) %>%
             addTiles()  %>% 
-            setView(lat=xy$lat, lng=xy$long ,zoom=12) %>%
+            setView(lat=xy$lat, lng=xy$long ,zoom=14) %>%
             addCircleMarkers(lng = xy$long, lat = xy$lat)
         })
     
