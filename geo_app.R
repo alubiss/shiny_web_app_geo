@@ -13,7 +13,7 @@ library(osmdata)
 library(osrm)
 
 world_spdf <- readOGR( 
-    dsn = '/Users/alubis/shiny_geo_proj/',
+    dsn = '/Users/alubis/shiny_geo_proj/maps/',
     layer ="TM_WORLD_BORDERS_SIMPL-0.3", 
     verbose = FALSE
 )
