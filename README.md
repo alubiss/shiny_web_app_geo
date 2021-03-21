@@ -1,6 +1,6 @@
 # shiny_web_app_geo
 
-My project prepared as part of the subject [Advanced Programming in R](https://usosweb.wne.uw.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&kod=2400-DS1APR) on my Master Studies.
+Project prepared as part of the subject [Advanced Programming in R](https://usosweb.wne.uw.edu.pl/kontroler.php?_action=katalog2/przedmioty/pokazPrzedmiot&kod=2400-DS1APR) on my Master Studies.
 
 The goals of assessment:
 
