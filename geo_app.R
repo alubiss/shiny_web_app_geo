@@ -18,7 +18,16 @@ world_spdf <- readOGR(
     verbose = FALSE
 )
 
+
+#world_spdf <- readOGR(
+#    dsn = '/Users/aleksander/Desktop/programowanie/R/kopia_repo/shiny_web_app_geo/maps',
+#    layer ="TM_WORLD_BORDERS_SIMPL-0.3", 
+#    verbose = FALSE
+#)
+
+
 source("/Users/alubis/shiny_geo_proj/functions.R")
+#source("/Users/aleksander/Desktop/programowanie/R/kopia_repo/shiny_web_app_geo/functions.R")
 
 ui <- dashboardPage(
     skin = "purple",
