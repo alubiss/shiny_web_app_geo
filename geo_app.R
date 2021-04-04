@@ -1,33 +1,33 @@
-
 library(shiny)
-
 library(dplyr)
 library("ggplot2")
 theme_set(theme_bw())
 library("sf")
+install.packages('shinydashboard')
 library(shinydashboard)
 library(shinyjs)
 library(leaflet)
 library('tidygeocoder')
 library(osmdata) 
 library(osrm)
+library(rgdal)
 
-world_spdf <- readOGR( 
-    dsn = '/Users/alubis/shiny_geo_proj/maps/',
-    layer ="TM_WORLD_BORDERS_SIMPL-0.3", 
-    verbose = FALSE
-)
-
-
-#world_spdf <- readOGR(
-#    dsn = '/Users/aleksander/Desktop/programowanie/R/kopia_repo/shiny_web_app_geo/maps',
+#world_spdf <- readOGR(  
+#    dsn = '/Users/alubis/shiny_geo_proj/maps/',
 #    layer ="TM_WORLD_BORDERS_SIMPL-0.3", 
 #    verbose = FALSE
 #)
 
 
-source("/Users/alubis/shiny_geo_proj/functions.R")
-#source("/Users/aleksander/Desktop/programowanie/R/kopia_repo/shiny_web_app_geo/functions.R")
+
+#source("/Users/alubis/shiny_geo_proj/functions.R")
+source("/Users/aleksander/Desktop/programowanie/R/kopia_repo/shiny_web_app_geo/functions.R")
+
+world_spdf <- readOGR(
+    dsn = '/Users/aleksander/Desktop/programowanie/R/kopia_repo/shiny_web_app_geo/maps/',
+    layer ="TM_WORLD_BORDERS_SIMPL-0.3", 
+    verbose = FALSE
+)
 
 ui <- dashboardPage(
     skin = "purple",

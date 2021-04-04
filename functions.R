@@ -1,3 +1,5 @@
+library(stringr)
+
 get_osm_data <- function(adress, our_key, our_value) {
   
   dane_search <- getbb(adress) %>%
