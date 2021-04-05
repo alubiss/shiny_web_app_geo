@@ -73,7 +73,19 @@ ui <- dashboardPage(
                             tabPanel("Map", leafletOutput("mapa_bus", width = "100%", height = 500)),
                             tabPanel("Informations"))))      
                 
-        )        
+        ),
+        
+        tabItem(tabName = "Restaurants",
+                
+                fluidRow(
+                    box(width=100,
+                        tabsetPanel(
+                            tabPanel("Map", leafletOutput("mapa_res", width = "100%", height = 500)),
+                            tabPanel("Informations"))))
+        
+        )
+        
+        
     )))
 )
 
@@ -104,9 +116,15 @@ server <- function(input, output, session) {
     
     ######################################### OUTPUT MAPA BUS ####################################################
     
-    bus_stops = get_osm_data(paste(input$city, "Poland", sep=", "), our_key = "amenity", our_value = 'bus_station') %>% plot_points(our_adress=xy)
+    bus_stops = get_osm_data(paste(input$city, "Poland", sep=", "), our_key = "public_transport", our_value = 'stop_position') %>% plot_points(our_adress=xy)
     output$mapa_bus <- renderLeaflet({bus_stops})
 
+    
+    ######################################### OUTPUT MAPA Restaurants ####################################################
+    
+    restaurants = get_osm_data(paste(input$city, "Poland", sep=", "), our_key = "amenity", our_value = 'restaurant') %>% plot_points(our_adress=xy)
+    output$mapa_res <- renderLeaflet({restaurants})
+    
     }) 
     
     }
