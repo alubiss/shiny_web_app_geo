@@ -1,0 +1,9 @@
+---
+title: "Report"
+params:
+  n: NA
+---
+
+Raport wygenerowany dnia `r format(Sys.time(), '%d %B %Y')`
+
+dla `r params$n`
