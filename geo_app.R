@@ -130,7 +130,22 @@ server <- function(input, output, session) {
     restaurants = get_osm_data(paste(input$city, "Poland", sep=", "), our_key = "amenity", our_value = 'restaurant') %>% plot_points(our_adress=xy)
     output$mapa_res <- renderLeaflet({restaurants})
     
-    }) 
+    
+    output$report <- downloadHandler(
+        
+        filename = "report.html",
+        content = function(file) {
+            
+            tempReport <- file.path(tempdir(), "report.Rmd")
+            file.copy("report.Rmd", tempReport, overwrite = TRUE)
+            
+            params <- list(n = input$text)
+
+            rmarkdown::render(tempReport, output_file = file,
+                              params = params,
+                              envir = new.env(parent = globalenv())
+            )})
+    })
     
     }
 
