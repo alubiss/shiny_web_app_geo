@@ -33,6 +33,7 @@ ui <- dashboardPage(
     dashboardHeader(title = "GEO app"),
     dashboardSidebar(sidebarMenu(
         # https://fontawesome.com/icons?d=gallery
+        menuItem("Main page", tabName = "main", icon = icon("globe-europe")),
         menuItem("Dashboard", tabName = "Dashboard", icon = icon("globe-europe")),
         menuItem("Tables", tabName = "Tables", icon = icon("info-circle")),
         menuItem("Bus stops", tabName = "Bus_stops", icon = icon("bus")),
@@ -44,6 +45,10 @@ ui <- dashboardPage(
      
         shiny::tagList(
         tabItems(
+        
+        tabItem("main",
+                includeMarkdown("main.Rmd")
+        ),
         tabItem(tabName = "Dashboard",   
         fluidRow( 
             box(width=100,
@@ -60,7 +65,8 @@ ui <- dashboardPage(
         box(width=100,
             tabsetPanel(
                 tabPanel("Map", leafletOutput("mapa", width = "100%", height = 500)),
-                tabPanel("Informations"))))
+                tabPanel("Informations"))),
+        downloadButton("report", "Generate report"))
         
          ),
         
